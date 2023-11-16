@@ -29,8 +29,7 @@ class Record:
         phone = Phone(phone_number)
         if phone not in self.phones:
             self.phones.append(phone)
-        else:
-            return 'Такий номер вже є '    
+        
            
 
     def remove_phone(self, phone_number):
