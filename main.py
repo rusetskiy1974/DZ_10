@@ -40,14 +40,11 @@ class Record:
     
 
     def edit_phone(self, phone, new_phone):
-        include_phone = False
         for n, i in enumerate(self.phones):
-                # print (i)
                 if i.__str__() == phone:
                     self.phones[n] = Phone(new_phone)
-                    include_phone = True
-        if not include_phone:
-            raise ValueError ('Номер відсутній' )   
+                    return
+        raise ValueError ('Номер відсутній' )   
                 
          
     def find_phone(self, phone_number:str):
