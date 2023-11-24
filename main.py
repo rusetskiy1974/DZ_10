@@ -15,11 +15,8 @@ class Field:
         return self.__value
     
     @value.setter
-    def value(self, value):
-        if isinstance(value, str):
-            self.__value = value
-        else:
-            raise Exception ('Wrong value')    
+    def value(self,  value):
+        self.__value = value
         
     def __str__(self):
         return str(self.value)
@@ -28,29 +25,40 @@ class Name(Field):
     pass
 
 class Phone(Field):
-    def __init__(self, value):
-        super().__init__(value)
-        if not value.isdigit() or len(value) != 10:
+    
+    @Field.value.setter
+    def value(self, value: str):
+        if value.isdigit() and len(value) == 10:
+            self._Field__value = value
+        else:    
             raise ValueError ('Номер не валідний')
-        
+            
+    
+       
 class Birthday(Field):
-    pass
+    @Field.value.setter
+    def value(self, value: str):
+        try:
+            if datetime.strptime(value, '%Y.%m.%d'):
+                self._Field__value = value
+        except:
+            raise ValueError ('Не правильний формат дати')    
+    
                  
 class Record:
 
-    def __init__(self, name, birthday : Birthday = None):
+    def __init__(self, name, birthday: Birthday = None):
         self.name = Name(name)
         self.phones = []
         self.birthday = birthday
-        
+               
 
     def add_phone(self, phone_number):
         phone = Phone(phone_number)
         if phone not in self.phones:
             self.phones.append(phone)
         
-           
-
+         
     def remove_phone(self, phone_number):
         for phone in self.phones:
             if phone.__str__() == phone_number:
@@ -105,43 +113,6 @@ class AddressBook(UserDict):
             if counter >= item_number:
                 yield result
                 counter = 0
-                result = ''    
-         
-
-d = '2023.11.10'
-bd = Birthday(d)
-
-# print (bd)
-book = AddressBook()
-
-# Створення запису для John
-john_record = Record("John", bd)
-john_record.add_phone("1234567890")
-john_record.add_phone("5555555555")
-print(john_record.days_to_birthday())
-
-# Додавання запису John до адресної книги
-book.add_record(john_record)
-
-# Створення та додавання нового запису для Jane
-jane_record = Record("Jane")
-jane_record.add_phone("9876543210")
-book.add_record(jane_record)
-
-# Виведення всіх записів у книзі
-for name, record in book.data.items():
-    print(record)
-
-# Знаходження та редагування телефону для John
-john = book.find("John")
-john.edit_phone("1234567890", "1112223333")
-
-print(john)  # Виведення: Contact name: John, phones: 1112223333; 5555555555
-
-# Пошук конкретного телефону у записі John
-found_phone = john.find_phone("5555555555")
-print(f"{john.name}: {found_phone}")  # Виведення: 5555555555
-
-# Видалення запису Jane
-book.delete("Jane")
+                result = ''
+        yield  result    
 
