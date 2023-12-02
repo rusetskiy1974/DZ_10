@@ -97,7 +97,7 @@ class Record:
                 if i.__str__() == phone:
                     self.phones[n] = Phone(new_phone)
                     return
-        raise IndexError ('Номер відсутній' )   
+        raise ValueError ('Номер відсутній' )   
                 
          
     def find_phone(self, phone_number:str):
